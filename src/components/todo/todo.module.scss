@@ -1,0 +1,42 @@
+@use "../../scss/variables.scss" as *;
+
+.todo {
+  border: $border-color;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+
+  .text {
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    h3, p {
+      word-wrap: break-word;
+      max-width: 100% ;
+    }
+
+    h3 {
+      font-size: large;
+      font-weight: bold;
+    }
+  }
+
+  .editor {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    button {
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        backdrop-filter: blur(5px);
+    }
+  }
+}
