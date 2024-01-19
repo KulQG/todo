@@ -1,9 +1,11 @@
-import { ADD_NEW_TODO, DELETE_TODO } from "./actions"
+import { ADD_NEW_TODO, DELETE_TODO, EDIT_TODO, MOVE_TODO } from "./actions"
 
 export interface TTodo {
   id: string
   title: string
   about: string
+  index: number
+  checked: boolean
 }
 
 export interface IState {
@@ -18,4 +20,12 @@ export type TodosAction =
   | {
       type: typeof DELETE_TODO
       payload: string
+    }
+  | {
+      type: typeof MOVE_TODO
+      payload: TTodo[]
+    }
+  | {
+      type: typeof EDIT_TODO
+      payload: TTodo
     }

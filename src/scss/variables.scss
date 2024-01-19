@@ -1,1 +1,8 @@
-$border-color: 1px solid black
+$border-color: 2px solid darkcyan;
+$panelsGap: 10px;
+@media screen and (max-width: 490px) {
+    $panelsGap: 5px
+}
+
+$base-color: darkcyan;
+$back-color: #A0CECE

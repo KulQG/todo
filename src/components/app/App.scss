@@ -1,4 +1,4 @@
-@use '../../scss/variables.scss' as *;
+@use "../../scss/variables.scss" as *;
 
 html,
 body,
@@ -134,8 +134,18 @@ button {
 }
 
 input {
+  min-height: 30px;
   border-radius: 10px;
   border: $border-color;
+  background-color: $back-color;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: $back-color;
 }
 
 .page {
@@ -146,35 +156,60 @@ input {
   flex-direction: column;
   gap: 20px;
 
-  .creator-form {
-    width: 100%;
-    height: 70px;
 
-    display: grid;
-    grid-auto-columns: 1fr;
-    grid-auto-rows: 1fr;
-    grid-template-columns: 1fr 1.1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 0px 0px;
-    grid-template-areas:
-      "input1 input1 btn"
-      "input2 input2 btn";
-    gap: 5px;
+  .creator {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 
-    button {
-      grid-area: btn;
+    .creator-form {
+      width: 100%;
+      max-height: 130px;
 
-      img {
+      display: flex;
+      gap: 5px;
+
+      .inputs {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      button {
         width: 70px;
+        max-height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $base-color;
+
+        img {
+          width: 70px;
+        }
       }
     }
+  }
 
-    .title {
-      grid-area: input1;
-    }
+  .about {
+    border-radius: 10px;
+    border: $border-color;
+    resize: none;
+    min-height: 85px;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    background-color: $back-color;
+  }
 
-    .about {
-      grid-area: input2;
+  .nav {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: $panelsGap;
+
+    @media screen and (max-width: 490px) {
+      flex-direction: column;
     }
   }
 

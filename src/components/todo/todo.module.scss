@@ -6,22 +6,46 @@
   padding: 15px;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
+  max-height: 110px;
+  overflow: hidden;
+
+  &Active {
+    max-height: none;
+  }
+
+  &Done {
+    opacity: 0.6;
+  }
 
   .text {
     max-width: 80%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 10px;
 
-    h3, p {
+    h3,
+    p {
+      color: $base-color;
       word-wrap: break-word;
-      max-width: 100% ;
+      max-width: 100%;
+      white-space: pre-wrap;
     }
 
     h3 {
       font-size: large;
       font-weight: bold;
     }
+
+    button {
+      background-color: $base-color;
+    }
+  }
+
+  .checkbox {
+    width: 30px;
+    cursor: pointer;
   }
 
   .editor {
@@ -30,13 +54,18 @@
     gap: 5px;
 
     button {
-        border-radius: 7px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 35px;
-        height: 35px;
-        backdrop-filter: blur(5px);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 35px;
+      height: 35px;
+      backdrop-filter: blur(5px);
+      background-color: $base-color;
+
+      img {
+        width: 25px;
+      }
     }
   }
 }

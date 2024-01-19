@@ -1,0 +1,42 @@
+@use "../../scss/variables.scss" as *;
+
+.panel {
+  box-sizing: border-box;
+  width: calc(50% - $panelsGap);
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $base-color;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.1s ease-out;
+
+  @media screen and (max-width: 490px) {
+    height: 30px;
+    width: 100%;
+  }
+
+  &:hover {
+    transition: 0.1s ease-in;
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    cursor: auto;
+    background-color: $back-color;
+    color: $base-color;
+  }
+
+  p {
+    font-size: 25px;
+
+    @media screen and (max-width: 850px) {
+      font-size: 20px;
+    }
+
+    @media screen and (max-width: 490px) {
+      font-size: 1.2em;
+    }
+  }
+}
