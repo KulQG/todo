@@ -1,16 +1,16 @@
 import { FC, useState } from "react"
 import styles from "./todo.module.scss"
 import { TTodo } from "../../services/types"
-import edit from "../../images/edit.png"
-import del from "../../images/delete.png"
 import { useDrag, useDrop } from "react-dnd"
 import { useAppDispatch, useAppSelector } from "../../services/hooks"
 import { EDIT_TODO, MOVE_TODO } from "../../services/actions"
 import Textarea from "../textarea/textarea"
 import done from "../../images/done.svg"
+import EditorButton from "./editor-button/editor-button"
 
 type TTodoProps = TTodo & {
   deletefn: () => void
+  canDnd: boolean
 }
 
 export const Todo: FC<TTodoProps> = ({
@@ -20,6 +20,7 @@ export const Todo: FC<TTodoProps> = ({
   deletefn,
   index,
   checked,
+  canDnd,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -50,6 +51,7 @@ export const Todo: FC<TTodoProps> = ({
     },
   })
 
+  // перемещение тудушек
   const moveCard = (fromIndex: number, toIndex: number) => {
     const newCardList = Array.from(todos)
     const [removedCard] = newCardList.splice(fromIndex, 1)
@@ -73,9 +75,14 @@ export const Todo: FC<TTodoProps> = ({
         className={`${styles.todo} ${isOpen ? styles.todoActive : ""} ${
           isChecked ? styles.todoDone : ""
         }`}
-        ref={(node) => {
-          dragRef(dropItem(node))
-        }}
+        ref={
+          // включено ли перетаскивание
+          canDnd
+            ? (node) => {
+                dragRef(dropItem(node))
+              }
+            : null
+        }
         onClick={() => setIsOpen(!isOpen)}
       >
         <input
@@ -136,20 +143,12 @@ export const Todo: FC<TTodoProps> = ({
           )}
         </div>
         <div className={styles.editor}>
-          <button
+          <EditorButton
             disabled={isEditing}
             onClick={() => setIsEditing(true)}
-            className={styles.edit}
-          >
-            <img src={edit} alt="Редактировать" />
-          </button>
-          <button
-            disabled={isEditing}
-            onClick={deletefn}
-            className={styles.delete}
-          >
-            <img src={del} alt="удалить" />
-          </button>
+            type="edit"
+          />
+          <EditorButton disabled={isEditing} onClick={deletefn} type="delete" />
         </div>
       </div>
     )

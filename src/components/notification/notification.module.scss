@@ -1,0 +1,21 @@
+@use '../../scss/variables.scss' as *;
+
+.notification {
+    max-width: 300px;
+    width: 80%;
+
+    background-color: white;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+    border: $border-color;
+    z-index: 3;
+}

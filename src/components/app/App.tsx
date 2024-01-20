@@ -1,18 +1,23 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "./App.scss"
 import plusIcon from "../../images/plus.svg"
 import { useAppDispatch, useAppSelector } from "../../services/hooks"
 import { Todo } from "../todo/todo"
-import { ADD_NEW_TODO, DELETE_TODO } from "../../services/actions"
+import {
+  ADD_NEW_TODO,
+  CHECK_SAVED_TODOS,
+  DELETE_TODO,
+} from "../../services/actions"
 import { v4 as uuidv4 } from "uuid"
 import { DndProvider } from "react-dnd"
-import { getBackend, opts } from "../../utils/constants"
+import { getBackend, isMobile, opts } from "../../utils/constants"
 import Textarea from "../textarea/textarea"
 import FilterPanel from "../filter-panel/filter-panel"
+import dragImg from "../../images/drag.png"
+import Notification from "../notification/notification"
+import DragButton from "../drag-button/drag-button"
 
 function App() {
-  const todos = useAppSelector((s) => s.todos.todos)
-
   const [isFiltered, setIsFiltered] = useState<"all" | "done" | "no done">(
     "all",
   )
@@ -21,6 +26,16 @@ function App() {
     title: "",
     about: "",
   })
+
+  const [isCanDrag, setIsCanDrag] = useState(false)
+
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    // проверка наличия сохраненных туду в localStorage
+    dispatch({ type: CHECK_SAVED_TODOS })
+  }, [])
+
+  const todos = useAppSelector((s) => s.todos.todos)
 
   const changeInput = (
     e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -32,8 +47,7 @@ function App() {
     }))
   }
 
-  const dispatch = useAppDispatch()
-
+  // добавление новых туду
   const addNewToDo = (e: React.FormEvent) => {
     e.preventDefault()
     if (creator.title || creator.about) {
@@ -50,6 +64,7 @@ function App() {
     }
   }
 
+  // рендер тудушек в зависимости от их активности
   const renderTodos = () => {
     if (todos) {
       if (isFiltered === "all") {
@@ -65,6 +80,7 @@ function App() {
               about={i.about}
               index={index}
               checked={i.checked}
+              canDnd={isCanDrag}
             />
           )
         })
@@ -82,6 +98,7 @@ function App() {
                 about={i.about}
                 index={index}
                 checked={i.checked}
+                canDnd={isCanDrag}
               />
             )
           } else {
@@ -102,6 +119,7 @@ function App() {
                 about={i.about}
                 index={index}
                 checked={i.checked}
+                canDnd={isCanDrag}
               />
             )
           } else {
@@ -113,47 +131,55 @@ function App() {
   }
 
   return (
-    <div className="page">
-      <div className="creator">
-        <form onSubmit={addNewToDo} className="creator-form">
-          <div className="inputs">
-            <input
-              value={creator.title}
-              className="title"
-              type="text"
-              placeholder="Заголовок"
-              onChange={changeInput}
-            />
-            <Textarea value={creator.about} onChange={changeInput} />
-          </div>
-          <button onClick={addNewToDo} type="submit">
-            <img src={plusIcon} alt="Добавить" />
-          </button>
-        </form>
+    <>
+      <div className="page">
+        <div className="creator">
+          <form onSubmit={addNewToDo} className="creator-form">
+            <div className="inputs">
+              <input
+                value={creator.title}
+                className="title"
+                type="text"
+                placeholder="Заголовок"
+                onChange={changeInput}
+              />
+              <Textarea value={creator.about} onChange={changeInput} />
+            </div>
+            <button onClick={addNewToDo} type="submit">
+              <img src={plusIcon} alt="Добавить" />
+            </button>
+          </form>
+        </div>
+        <nav className="nav">
+          <FilterPanel
+            disabled={isFiltered === "all"}
+            text="Все"
+            onClick={() => setIsFiltered("all")}
+          />
+          <FilterPanel
+            disabled={isFiltered === "no done"}
+            text="Невыполненные"
+            onClick={() => setIsFiltered("no done")}
+          />
+          <FilterPanel
+            disabled={isFiltered === "done"}
+            text="Выполненные"
+            onClick={() => setIsFiltered("done")}
+          />
+        </nav>
+        <div className="todos">
+          <DndProvider backend={getBackend()} options={opts}>
+            {renderTodos()}
+          </DndProvider>
+        </div>
       </div>
-      <nav className="nav">
-        <FilterPanel
-          disabled={isFiltered === "all"}
-          text="Все"
-          onClick={() => setIsFiltered("all")}
+      {isMobile && (
+        <DragButton
+          onClick={() => setIsCanDrag(!isCanDrag)}
+          isCanDrag={isCanDrag}
         />
-        <FilterPanel
-          disabled={isFiltered === "no done"}
-          text="Невыполненные"
-          onClick={() => setIsFiltered("no done")}
-        />
-        <FilterPanel
-          disabled={isFiltered === "done"}
-          text="Выполненные"
-          onClick={() => setIsFiltered("done")}
-        />
-      </nav>
-      <div className="todos">
-        <DndProvider backend={getBackend()} options={opts}>
-          {renderTodos()}
-        </DndProvider>
-      </div>
-    </div>
+      )}
+    </>
   )
 }
 

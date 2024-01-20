@@ -1,0 +1,17 @@
+@use '../../scss/variables.scss' as *;
+
+.dragBtn {
+  width: 60px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2;
+  background-color: $base-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 38px;
+  }
+}

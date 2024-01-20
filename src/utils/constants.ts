@@ -15,8 +15,10 @@ export const opts = {
   ],
 }
 
-export const getBackend = () => {
-  const screenWidth = window.screen.width
+export const mobileWidth = 768
 
-  return screenWidth > 768 ? HTML5Backend : TouchBackend
+export const isMobile = window.screen.width <= mobileWidth
+
+export const getBackend = () => {
+  return !isMobile ? HTML5Backend : TouchBackend
 }
