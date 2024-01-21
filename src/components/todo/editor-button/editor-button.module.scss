@@ -1,16 +1,12 @@
-@use '../../../scss/variables.scss' as *;
+@use "../../../scss/variables.scss" as *;
 
-.edtorBtn {
-    border-radius: 7px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 35px;
-    height: 35px;
-    backdrop-filter: blur(5px);
-    background-color: $base-color;
+.editorBtn {
+  border-radius: 7px;
+  @extend %centerFlex;
+  width: 35px;
+  height: 35px;
 
-    img {
-      width: 25px;
-    }
+  img {
+    width: 25px;
   }
+}

@@ -1,8 +1,16 @@
 $border-color: 2px solid darkcyan;
 $panelsGap: 10px;
 @media screen and (max-width: 490px) {
-    $panelsGap: 5px
+  $panelsGap: 5px;
 }
 
 $base-color: darkcyan;
-$back-color: #A0CECE
+$back-color: #a0cece;
+
+%centerFlex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+$transition: .5s ease-in-out;

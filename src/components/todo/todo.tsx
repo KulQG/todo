@@ -29,6 +29,7 @@ export const Todo: FC<TTodoProps> = ({
     title: title,
     about: about,
   })
+  const [isAnimate, setIsAnimate] = useState(false)
 
   const dispatch = useAppDispatch()
   const todos = useAppSelector((s) => s.todos.todos)
@@ -74,7 +75,7 @@ export const Todo: FC<TTodoProps> = ({
       <div
         className={`${styles.todo} ${isOpen ? styles.todoActive : ""} ${
           isChecked ? styles.todoDone : ""
-        }`}
+        } ${isAnimate ? styles.todoAnimEnd : ""}`}
         ref={
           // включено ли перетаскивание
           canDnd
@@ -83,7 +84,11 @@ export const Todo: FC<TTodoProps> = ({
               }
             : null
         }
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (!isEditing) {
+            setIsOpen(!isOpen)
+          }
+        }}
       >
         <input
           type="checkbox"
@@ -148,7 +153,17 @@ export const Todo: FC<TTodoProps> = ({
             onClick={() => setIsEditing(true)}
             type="edit"
           />
-          <EditorButton disabled={isEditing} onClick={deletefn} type="delete" />
+          <EditorButton
+            disabled={isEditing}
+            onClick={() => {
+              setIsAnimate(true)
+              setTimeout(() => {
+                setIsAnimate(false)
+                deletefn()
+              }, 500)
+            }}
+            type="delete"
+          />
         </div>
       </div>
     )

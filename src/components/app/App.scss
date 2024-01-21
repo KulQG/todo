@@ -131,6 +131,22 @@ button {
   cursor: pointer;
   border: $border-color;
   border-radius: 15px;
+  transition: 0.2s ease-in-out;
+  background-color: $base-color;
+
+  &:disabled {
+    color: $base-color;
+    background-color: $back-color;
+    cursor: auto;
+  }
+
+  &:hover {
+    opacity: 0.7;
+
+    &:disabled {
+      opacity: 1;
+    }
+  }
 }
 
 input {
@@ -179,10 +195,7 @@ body {
       button {
         width: 70px;
         max-height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: $base-color;
+        @extend %centerFlex;
 
         img {
           width: 70px;
@@ -217,5 +230,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    margin-bottom: 50px;
   }
 }

@@ -13,21 +13,18 @@ import { DndProvider } from "react-dnd"
 import { getBackend, isMobile, opts } from "../../utils/constants"
 import Textarea from "../textarea/textarea"
 import FilterPanel from "../filter-panel/filter-panel"
-import dragImg from "../../images/drag.png"
-import Notification from "../notification/notification"
 import DragButton from "../drag-button/drag-button"
+import { TTodo } from "../../services/types"
 
 function App() {
   const [isFiltered, setIsFiltered] = useState<"all" | "done" | "no done">(
     "all",
   )
-
   const [creator, setCreator] = useState({
     title: "",
     about: "",
   })
-
-  const [isCanDrag, setIsCanDrag] = useState(false)
+  const [isCanDrag, setIsCanDrag] = useState(isMobile ? false : true)
 
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -64,43 +61,38 @@ function App() {
     }
   }
 
+  const deleteTodo = (id: string) => {
+    dispatch({ type: DELETE_TODO, payload: id })
+  }
+
+  const renderTodo = (i: TTodo, index: number) => {
+    return (
+      <Todo
+        key={i.id}
+        deletefn={() => {
+          deleteTodo(i.id)
+        }}
+        id={i.id}
+        title={i.title}
+        about={i.about}
+        index={index}
+        checked={i.checked}
+        canDnd={isCanDrag}
+      />
+    )
+  }
+
   // рендер тудушек в зависимости от их активности
   const renderTodos = () => {
     if (todos) {
       if (isFiltered === "all") {
         return todos.map((i, index) => {
-          return (
-            <Todo
-              key={i.id}
-              deletefn={() => {
-                dispatch({ type: DELETE_TODO, payload: i.id })
-              }}
-              id={i.id}
-              title={i.title}
-              about={i.about}
-              index={index}
-              checked={i.checked}
-              canDnd={isCanDrag}
-            />
-          )
+          return renderTodo(i, index)
         })
       } else if (isFiltered === "done") {
         return todos.map((i, index) => {
           if (i.checked === true) {
-            return (
-              <Todo
-                key={i.id}
-                deletefn={() => {
-                  dispatch({ type: DELETE_TODO, payload: i.id })
-                }}
-                id={i.id}
-                title={i.title}
-                about={i.about}
-                index={index}
-                checked={i.checked}
-                canDnd={isCanDrag}
-              />
-            )
+            return renderTodo(i, index)
           } else {
             return null
           }
@@ -108,25 +100,14 @@ function App() {
       } else if (isFiltered === "no done") {
         return todos.map((i, index) => {
           if (i.checked === false) {
-            return (
-              <Todo
-                key={i.id}
-                deletefn={() => {
-                  dispatch({ type: DELETE_TODO, payload: i.id })
-                }}
-                id={i.id}
-                title={i.title}
-                about={i.about}
-                index={index}
-                checked={i.checked}
-                canDnd={isCanDrag}
-              />
-            )
+            return renderTodo(i, index)
           } else {
             return null
           }
         })
       }
+    } else {
+      return null
     }
   }
 
